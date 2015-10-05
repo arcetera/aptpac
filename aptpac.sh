@@ -5,4 +5,4 @@
 
 echo 'i have no idea what i am doing'
 
-echo 'thanks rob'
+echo 'thanks rob you suck'
