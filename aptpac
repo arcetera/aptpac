@@ -1,0 +1,81 @@
+#!/bin/bash
+#
+#               __                             
+#              /\ \__                          
+#   __    _____\ \ ,_\ _____     __      ___   
+# /'__`\ /\ '__`\ \ \//\ '__`\ /'__`\   /'___\ 
+#/\ \L\.\\ \ \L\ \ \ \\ \ \L\ /\ \L\.\_/\ \__/ 
+#\ \__/.\_\ \ ,__/\ \__\ \ ,__\ \__/.\_\ \____\
+# \/__/\/_/\ \ \/  \/__/\ \ \/ \/__/\/_/\/____/
+#           \ \_\        \ \_\                 
+#            \/_/         \/_/    
+# a pacman wrapper with syntax based on debian's apt
+# (c) arcetera 2015 - wtfpl
+
+SYNTAX=$1
+INPUT=$2
+
+if [ "$SYNTAX" == "install" ]
+then
+        sudo pacman -S $INPUT
+elif [ "$SYNTAX" == "search" ]
+then
+        pacman -Ss $INPUT
+elif [ "$SYNTAX" == "remove" ]
+then
+        sudo pacman -Rs $INPUT
+elif [ "$SYNTAX" == "upgrade" ]
+then
+        sudo pacman -Syu
+elif [ "$SYNTAX" == "update" ]
+then
+        sudo pacman -Sy
+        echo "run aptpac upgrade *immediately*. pacman does not support partial upgrades. running merely 'upgrade' would suffice. failure to do this could result in a broken installation."
+elif [ "$SYNTAX" == "download" ]
+then
+        sudo pacman -Sw $INPUT
+elif [ "$SYNTAX" == "autoremove" ]
+then
+        sudo pacman -Qdtq | pacman -Rs -
+elif [ "$SYNTAX" == "show" ]
+then
+        pacman -Qi $INPUT
+elif [ "$SYNTAX" == "clean" ]
+then
+        sudo pacman -Sc
+elif [ "$SYNTAX" == "autoclean" ]
+then
+        sudo pacman -Sc
+elif [ "$SYNTAX" == "policy" ]
+then
+        less /etc/pacman.d/mirrorlist
+elif [ "$SYNTAX" == "list" ]
+then
+        pacman -Q
+elif [ "$SYNTAX" == "listmore" ]
+then
+        pacman -Qi
+elif [ "$SYNTAX" == "listless" ]
+then
+        pacman -Q | wc -l
+elif [ "$SYNTAX" == "build" ]
+then
+        makepkg -sri
+else
+        echo "aptpac: a pacman wrapper with apt syntax"
+        echo "no argument/invalid argument - print this help"
+        echo "install - installs a package"
+        echo "search - searches for a package in the repos"
+        echo "remove - removes a package"
+        echo "upgrade - upgrades the system fully, refreshing repos and upgrading packages"
+        echo "update - only refreshes the repos (bad practice, do not run this without running 'upgrade' immediately after"
+        echo "download - only download a package into pacman's cache without installing it"
+        echo "autoremove - remove dependencies that are no longer needed (usually should not be needed as 'remove' should remove dependencies along with the package)"
+        echo "show - shows information about the package"
+        echo "clean/autoclean - clears pacman's cache"
+        echo "policy - prints mirrorlist"
+        echo "list - lists all installed packages"
+        echo "listmore - lists all installed packages with all info"
+        echo "listless - lists how many packages are installed"
+        echo "build - builds package from PKGBUILD"
+fi
